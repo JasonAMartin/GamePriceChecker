@@ -19,7 +19,7 @@ function isDataValid (game) {
   if (!game.hasOwnProperty('stores')) hasError = true
   if (!game.stores.hasOwnProperty('price')) hasError = true
   if (game.stores.price === null) hasError = true
-  return hasError
+  return true // TODO This is messed up
 }
 
 function shouldNotify (game) {
@@ -29,7 +29,7 @@ function shouldNotify (game) {
   let notify = false
   let reason
   let color
-  //let sendIFTTT = false
+  let sendIFTTT = false
   const voucher = Transforms.setVoucherCode(game)
   const currentPrice = Transforms.setBestPrice(game)
   const currentBestStore = Transforms.setBestStore(game)
@@ -38,16 +38,16 @@ function shouldNotify (game) {
   const configBuyPrice = GameData.games[game.id].buyPrice
   const personalBuyPrice = (GameData.config.historicalAdjust) ? adjustedBuyPrice : configBuyPrice
   const historicalNotification = GameData.config.notifyHistorical
-  // const IFTTT = GameData.config.iftttNotify
-  // const iftttNotifyType = GameData.config.iftttNotifyType
-  // const iftttURL = GameData.config.iftttURL
+  const IFTTT = GameData.config.iftttNotify
+  const iftttNotifyType = GameData.config.iftttNotifyType
+  const iftttURL = GameData.config.iftttURL
 
   // notify if notifyHistorical is on and the game is at its historical price
   if (historicalNotification && (currentPrice === historicalLowPrice)) {
     notify = true
     reason = 'Historical Low'
     color = GameData.config.historicalLowColor
-   // if (IFTTT && (iftttNotifyType === 'all' || iftttNotifyType == 'historical')) sendIFTTT = true
+    if (IFTTT && (iftttNotifyType === 'all' || iftttNotifyType === 'historical')) sendIFTTT = true
   }
 
   // notify if game is at or below buyPrice & override historical low reasoning since this is more important.
@@ -55,15 +55,26 @@ function shouldNotify (game) {
     notify = true
     reason = 'Buy Price'
     color = GameData.config.buyColor
-   // if (IFTTT && (iftttNotifyType === 'all' || iftttNotifyType == 'myprice')) sendIFTTT = true
+   if (IFTTT && (iftttNotifyType === 'all' || iftttNotifyType === 'myprice')) sendIFTTT = true
   }
 
   // log out the notification
   if (notify) {
     console.log(colors[color](`${reason} :: ${game.gameName} - ${currentPrice} at ${currentBestStore} ${voucher} (HISTORICAL LOW: ${historicalLowPrice})`))
-    // if (sendIFTTT) {
-    //   fetch(iftttURL, {method: 'POST', headers: 'Content-Type: application/json', body: {game: game.gameName, price: currentPrice, store: currentBestStore, voucher: voucher, historicalLow: historicalLowPrice } })
-    // }
+    if (sendIFTTT) {
+      // IFTTT Maker Webhook takes 3 values: value1, value2 and value3
+      fetch(iftttURL, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'value1': game.gameName,
+          'value2': currentPrice,
+          'value3': `Store: ${currentBestStore} - HistoricalLowPrice: ${historicalLowPrice} - Voucher: ${voucher}`
+        }) })
+    }
   }
 }
 
@@ -92,7 +103,8 @@ exports.getGameData = function (games) {
           shouldNotify(PricingData[game], GameData)
         })
         .catch(function(error) {
-          console.log(`~~~~~~~~ Fetch Error: ${error.message} (Game ID: ${game})~~~~~~~~`);
+          // Making error silent
+          // console.log(`~~~~~~~~ Fetch Error: ${error.message} (Game ID: ${game})~~~~~~~~`);
         })
     }
   }
