@@ -1,5 +1,6 @@
 const http = require('http')
 const fs = require('fs')
+const colors = require('colors/safe');
 const fetch = require('node-fetch')
 const GameData = require('./config')
 const args = require('yargs').argv
@@ -31,6 +32,7 @@ function shouldNotify (game) {
 
   let notify = false
   let reason
+  let color
   const currentPrice = (game.stores.hasOwnProperty('price')) ? game.stores.price.price : -1;
   const currentBestStore = (game.stores.hasOwnProperty('price')) ? game.stores.price.store : 'UNKNOWN';
   const historicalLowPrice = (game.stores.hasOwnProperty('lowest')) ? game.stores.lowest.price : -1;
@@ -40,14 +42,16 @@ function shouldNotify (game) {
   if (GameData.config.notifyHistorical && (currentPrice === historicalLowPrice)) {
     notify = true
     reason = 'Historical Low'
+    color = GameData.config.historicalLowColor
   }
   // notify if game is at or below buyPrice & override historical low reasoning since this is more important.
   if (currentPrice <= personalBuyPrice) {
     notify = true
     reason = 'Buy Price'
+    color = GameData.config.buyColor
   }
   if (notify) {
-    console.log(`${reason} :: ${game.gameName} - ${currentPrice} at ${currentBestStore} (HISTORICAL LOW: ${historicalLowPrice})`)
+    console.log(colors[color](`${reason} :: ${game.gameName} - ${currentPrice} at ${currentBestStore} (HISTORICAL LOW: ${historicalLowPrice})`))
   }
 }
 

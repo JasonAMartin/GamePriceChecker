@@ -93,6 +93,8 @@ exports.games = {
 * notifyHistorical - If true, game will appear if it's at or within 10% of historical low.
 * historicalAdjust - If true, it will only notify you if your buyPrice is within the historicalAdjustPercent of the historical low.
 * historicalAdjustPercent - If using historicalAdjust, you can set a buy price at any price, but you'll only be notified if the current lowest is historical low + percent adjustment or lower. Formula is historicalPrice * historicalAdjustPercent
+* buyColor: The console color code to use for this notice (using https://www.npmjs.com/package/colors).
+* historicalLowColor: The console color code to use for this notice.
 */
 
 exports.config = {
@@ -102,6 +104,8 @@ exports.config = {
   enhancedsteamPrefix: 'http://api.enhancedsteam.com/pricev2/?search=app/',
   enhancedsteamSuffix: '&stores=cdkeys,amazonus,bundlestars,coinplay,direct2drive,dlgamer,dotemu,fireflower,funstock,gamebillet,gamersgate,gamesplanet,gamesrepublic,gog,greenmangaming,humblestore,humblewidgets,imperialgames,impulse,indiegalastore,indiegamestand,newegg,nuuvem,origin,playfield,silagames,squenix,steam,uplay,wingamestore,&cc=US&coupon=true',
   notifyHistorical: true,
-  historicalAdjust: false,
-  historicalAdjustPercent: 1.10
+  historicalAdjust: true,
+  historicalAdjustPercent: 1.10,
+  buyColor: 'green',
+  historicalLowColor: 'white'
 }
