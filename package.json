@@ -1,6 +1,6 @@
 {
   "name": "gamepricechecker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Customized system that notifies you when it's time to buy a PC game.",
   "main": "app.js",
   "scripts": {
