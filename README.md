@@ -36,5 +36,3 @@ Additionally, you may want to run ```npm run update``` if it's been a few days o
 #### TODO:
 
 * Improve Steam data functionality -- some games need different data processing and those games are currently ignored.
-
-* Add functionality to allow for looking for games near historical lows (for example, games within 10% of their historical low).
