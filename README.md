@@ -26,6 +26,23 @@ You'll need to have [Node](http://www.nodejs.org) & [NPM](http://www.npmjs.com) 
 * Update the data files by running ```npm run update```.
 * Check the prices for the games you've chosen by running ```npm run update```.
 
+## IFTTT Setup
+
+I've added the ability to push notifications to IFTTT so I can automate the script and get notified when something happens that I care about.
+
+To use IFTTT, you'll need to do a few things (I'm assuming you know IFTTT a little or will go find out).
+
+1. Signup for an account at [IFTTT](https://www.ifttt.com).
+
+2. Go to "NEW APPLET" and search for "Maker Webhooks".
+
+3. Get the KEY from [https://ifttt.com/services/maker_webhooks/settings](https://ifttt.com/services/maker_webhooks/settings).
+
+4. Update iftttURL in config.js to use your KEY.
+
+5. Make a new Maker Webhook so that if event "gamesale" happens, it emails you or tweets or whatever you want.
+
+
 ## Additional Information:
 
 Each time you add a new game to the config file, make sure you run ```npm run update``` to create a data file for it.
