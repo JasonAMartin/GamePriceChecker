@@ -32,6 +32,13 @@ Each time you add a new game to the config file, make sure you run ```npm run up
 
 Additionally, you may want to run ```npm run update``` if it's been a few days or so since your last update just to make sure you have good data.
 
+## Dev Note
+
+I should point out that I'm not really doing much error checking / testing for this script since it's not too serious. This was supposed to be a development project over my lunch hour, but I put in a few more hours into it in the evening.
+
+As time permits, I may tinker a bit and improve code stability.
+
+If you find some blinding error, feel free to point it out.
 
 #### TODO:
 
