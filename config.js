@@ -95,6 +95,9 @@ exports.games = {
 * historicalAdjustPercent - If using historicalAdjust, you can set a buy price at any price, but you'll only be notified if the current lowest is historical low + percent adjustment or lower. Formula is historicalPrice * historicalAdjustPercent
 * buyColor: The console color code to use for this notice (using https://www.npmjs.com/package/colors).
 * historicalLowColor: The console color code to use for this notice.
+* iftttNotify: Set to true if you want an event sent to IFTTT.
+* iftttURL: The url to send the notification to (see README for more info).
+* iftttNotifyType: Type of notifications you want sent to IFTTT. Values are: all, historical or myprice.
 */
 
 exports.config = {
@@ -104,8 +107,11 @@ exports.config = {
   enhancedsteamPrefix: 'http://api.enhancedsteam.com/pricev2/?search=app/',
   enhancedsteamSuffix: '&stores=cdkeys,amazonus,bundlestars,coinplay,direct2drive,dlgamer,dotemu,fireflower,funstock,gamebillet,gamersgate,gamesplanet,gamesrepublic,gog,greenmangaming,humblestore,humblewidgets,imperialgames,impulse,indiegalastore,indiegamestand,newegg,nuuvem,origin,playfield,silagames,squenix,steam,uplay,wingamestore,&cc=US&coupon=true',
   notifyHistorical: true,
-  historicalAdjust: true,
+  historicalAdjust: false,
   historicalAdjustPercent: 1.10,
   buyColor: 'green',
-  historicalLowColor: 'white'
+  historicalLowColor: 'white',
+  iftttNotify: true,
+  iftttURL: 'https://maker.ifttt.com/trigger/gamesale/with/key/YOURKEYHERE',
+  iftttNotifyType: 'myprice'
 }
