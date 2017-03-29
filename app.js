@@ -23,24 +23,31 @@ function getSteamData (id) {
 }
 
 function shouldNotify (game) {
-  //console.log('GAME: ', game);
+  // adding some quick n dirty error checking
+  // dump games without stores or price nodes.
+  if (!game.hasOwnProperty('stores')) return false;
+  if (!game.stores.hasOwnProperty('price')) return false;
+  if (game.stores.price === null) return false;
+
   let notify = false
   let reason
-  const historicalLowPrice = game.stores.lowest.price;
+  const currentPrice = (game.stores.hasOwnProperty('price')) ? game.stores.price.price : -1;
+  const currentBestStore = (game.stores.hasOwnProperty('price')) ? game.stores.price.store : 'UNKNOWN';
+  const historicalLowPrice = (game.stores.hasOwnProperty('lowest')) ? game.stores.lowest.price : -1;
   const personalBuyPrice = (GameData.config.historicalAdjust)
     ? Number(GameData.games[game.id].buyPrice * GameData.config.historicalAdjustPercent) : GameData.games[game.id].buyPrice;
   // notify if notifyHistorical is on and the game is at its historical price
-  if (GameData.config.notifyHistorical && (game.stores.price.price === historicalLowPrice)) {
+  if (GameData.config.notifyHistorical && (currentPrice === historicalLowPrice)) {
     notify = true
     reason = 'Historical Low'
   }
   // notify if game is at or below buyPrice & override historical low reasoning since this is more important.
-  if (game.stores.price.price <= personalBuyPrice) {
+  if (currentPrice <= personalBuyPrice) {
     notify = true
     reason = 'Buy Price'
   }
   if (notify) {
-    console.log(`${reason} :: ${game.gameName} - ${game.stores.price.price} at ${game.stores.price.store} (HISTORICAL LOW: ${historicalLowPrice})`)
+    console.log(`${reason} :: ${game.gameName} - ${currentPrice} at ${currentBestStore} (HISTORICAL LOW: ${historicalLowPrice})`)
   }
 }
 
